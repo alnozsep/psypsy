@@ -4,7 +4,6 @@ let isDebug;
 let numTrial;
 let fixationDuration;
 let judgementDuration;
-let evaluationDuration;
 let explanationDuration;
 let backgroundColor;
 let textColor;
@@ -24,12 +23,11 @@ let s = 1;
 function setup() {
     createCanvas(800, 600);
     frameRate(20); // Define experimental settings
-    isDebug = true;
-    numTrial = 3;
-    evaluationDuration = 6000;
+    isDebug = false;
+    numTrial = 10;
     explanationDuration = 5000;
     fixationDuration = 1000; // [milliseconds]
-    judgementDuration = 6000; // [milliseconds]
+    judgementDuration = 12000; // [milliseconds]
     backgroundColor = 255; // gray-scale value from 0 (black) to 255 (white)
     textColor = 0; // gray-scale value from 0 (black) to 255 (white)
     // initialize valuables
@@ -71,7 +69,7 @@ function titlePhase() {
 }
 function explanationPhase() {
     fill(textColor);
-    text("気持ち悪くなったら、直ちにESCキーを押してください", 100, 300);
+    text("気持ち悪くなったら、直ちにブラウザを閉じてください", 100, 300);
     let elapsedTime = millis() - baseTime;
     if (elapsedTime > explanationDuration) {
         transitState();
@@ -92,7 +90,7 @@ function fixationPhase() {
 function responsePhase() {
     // draw message
     fill(textColor);
-    text("この円は好きですか?", 300, 100); // draw stimuli
+    text("この円は好きですか?", 200, 100); // draw stimuli
     if (s == 1) {
         proba = random(10);
         if (proba < 5) {
@@ -136,11 +134,8 @@ function responsePhase() {
 }
 function evaluatePhase() {
     fill(textColor);
-    text("5段階で先ほどの円を評価してください", 0, 300);
+    text("5段階で先ほどの円を評価してください", 50, 300);
     let elapsedTime = millis() - baseTime;
-    if (elapsedTime > evaluationDuration) {
-        transitState();
-    }
 }
 function endPhase() {
     // draw message
@@ -214,7 +209,7 @@ function keyPressed() {
     }
 }
 function saveData() {
-    let fileName = "data/result.csv";
+    let fileName = "data/result";
     let dataStrings = new Array(numTrial + 1);
     dataStrings[0] = "\tResponse\tRT\tTempo";
     for (let i = 0; i < numTrial; i++) {
