@@ -92,7 +92,7 @@ function responsePhase() {
     fill(textColor);
     text("この円は好きですか?", 200, 100); // draw stimuli
     if (s == 1) {
-        proba = random(10);
+        proba = int(random(10));
         if (proba < 5) {
             Tempo[currentTrial] = 1;
         } else {
