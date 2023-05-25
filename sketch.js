@@ -221,7 +221,7 @@ function saveData() {
             "\t" +
             nf(Tempo[i], 1);
     }
-    saveStrings(dataStrings,fileName);
+    saveStrings(dataStrings,fileName,"csv");
 }
 function drawDebugInfo() {
     let elapsedTime = (millis() - baseTime) / 1000.0;
