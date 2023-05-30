@@ -5,6 +5,7 @@ let numTrial;
 let fixationDuration;
 let judgementDuration;
 let explanationDuration;
+let adjustingDuration;
 let backgroundColor;
 let textColor;
 let proba; // Variables
@@ -16,18 +17,21 @@ let RT; // variable for storing RT (reaction time)
 let Tempo;
 let font;
 let kick;
-let csize = 50;
+let csize = 60;
 let grow = 0;
 let n = 1;
+let m;
 let s = 1;
 function setup() {
     createCanvas(800, 600);
-    frameRate(20); // Define experimental settings
-    isDebug = false;
-    numTrial = 10;
+    frameRate(30); // Define experimental settings
+    isDebug = true;
+    numTrial = 5;
+    m = 30
     explanationDuration = 5000;
+    adjustingDuration = 10000;
     fixationDuration = 1000; // [milliseconds]
-    judgementDuration = 12000; // [milliseconds]
+    judgementDuration = 9000; // [milliseconds]
     backgroundColor = 255; // gray-scale value from 0 (black) to 255 (white)
     textColor = 0; // gray-scale value from 0 (black) to 255 (white)
     // initialize valuables
@@ -50,12 +54,14 @@ function draw() {
     } else if (currentState == 1) {
         explanationPhase();
     } else if (currentState == 2) {
-        fixationPhase();
+        adjustingPhase();
     } else if (currentState == 3) {
-        responsePhase();
+         fixationPhase();
     } else if (currentState == 4) {
-        evaluatePhase();
+        responsePhase();
     } else if (currentState == 5) {
+        evaluatePhase();
+    } else if (currentState == 6) {
         endPhase();
     }
     if (isDebug) {
@@ -75,6 +81,35 @@ function explanationPhase() {
         transitState();
     }
 }
+
+function  adjustingPhase() {
+    fill(0, 0, 0);
+    if (frameCount%30==0){
+       kick.play();
+    }
+    if (frameCount%30 ==0){
+        grow = 20;
+        }
+    noStroke();
+    smooth();
+    if (csize > 120) {
+        csize = 120;
+        grow = -20;
+    }
+    if (csize < 60) {
+        csize = 60;
+        grow =0 ;
+    }
+    ellipse(400, 300, csize, csize);
+    csize = csize + grow;
+    
+    text("音量と画面の明るさを調整してください", 100, 50);
+    let elapsedTime = millis() - baseTime;
+    if (elapsedTime > adjustingDuration) {
+        transitState();
+    }
+}
+
 function fixationPhase() {
     // draw fixation cross
     stroke(200); // define gray scale color (0 to 255) of lines
@@ -92,35 +127,47 @@ function responsePhase() {
     fill(textColor);
     text("この円は好きですか?", 200, 100); // draw stimuli
     if (s == 1) {
-        proba = int(random(10));
-        if (proba < 5) {
+        proba = int(random(21));
+        if (proba < 3) {
             Tempo[currentTrial] = 1;
-        } else {
+            m = 10;
+        } else if (proba < 6){
             Tempo[currentTrial] = 2;
+            m = 12;
+        } else if (proba < 9){
+            Tempo[currentTrial] = 3;
+            m = 15;
+        } else if (proba <12){
+            Tempo[currentTrial] = 4;
+            m =  18;
+        } else if (proba <15){
+            Tempo[currentTrial] = 5;
+            m = 20;
+        } else if (proba <18){
+            Tempo[currentTrial] = 6;
+            m = 30;
+        } else if (proba <21){
+            Tempo[currentTrial] = 7;
+            kick.setVolume(0);
+            m= 10;
         }
     }
-    if (proba < 5) {
-        if (n % 20 == 0) {
-            kick.play();
-        }
-    } else {
-        if (n % 30 == 0) {
-            kick.play();
-        }
+    fill(0, 0, 0);
+    if (n%m==0){
+       kick.play();
     }
+    if (n% 10 ==0){
+        grow = 20;
+        }
     noStroke();
     smooth();
-    fill(0, 0, 0);
-    if (n % 20 == 0) {
-        grow = 20;
-    }
-    if (csize > 100) {
-        csize = 100;
+    if (csize > 120) {
+        csize = 120;
         grow = -20;
     }
-    if (csize < 50) {
-        csize = 50;
-        grow = 0;
+    if (csize < 60) {
+        csize = 60;
+        grow =0 ;
     }
     ellipse(400, 300, csize, csize);
     csize = csize + grow;
@@ -152,7 +199,10 @@ function transitState() {
     } else if (currentState == 3) {
         currentState = 4;
         baseTime = millis();
-    } else {
+    } else if (currentState == 4) {
+        currentState = 5;
+        baseTime = millis();
+    }else {
         if (currentTrial == numTrial - 1) {
             // if all the trials have done, save data and transit to state 3.
             saveData();
@@ -209,7 +259,6 @@ function keyPressed() {
     }
 }
 function saveData() {
-    let fileName = "data/result";
     let dataStrings = new Array(numTrial + 1);
     dataStrings[0] = "\tResponse\tRT\tTempo";
     for (let i = 0; i < numTrial; i++) {
@@ -219,9 +268,9 @@ function saveData() {
             "\t" +
             nf(RT[i], 4, 4) +
             "\t" +
-            nf(Tempo[i], 1);
+            nf(Tempo[i], 1) 
     }
-    saveStrings(dataStrings,fileName,"csv");
+    saveStrings(dataStrings,"data_result","csv");
 }
 function drawDebugInfo() {
     let elapsedTime = (millis() - baseTime) / 1000.0;
@@ -229,4 +278,5 @@ function drawDebugInfo() {
     text("currentState: " + currentState, 20, 25);
     text("currentTrial: " + currentTrial, 20, 50);
     text("elapsedTime: " + nf(elapsedTime, 1, 2), 20, 75);
+    text("Tempo: " + Tempo, 20, 100);
 }
