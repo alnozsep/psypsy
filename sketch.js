@@ -76,6 +76,7 @@ function titlePhase() {
 function explanationPhase() {
     fill(textColor);
     text("気持ち悪くなったら、直ちにブラウザを閉じてください", 100, 300);
+    text("この実験は図形の動きに関する実験です", 100, 250);
     let elapsedTime = millis() - baseTime;
     if (elapsedTime > explanationDuration) {
         transitState();
@@ -103,7 +104,7 @@ function  adjustingPhase() {
     ellipse(400, 300, csize, csize);
     csize = csize + grow;
     
-    text("音量と画面の明るさを調整してください", 100, 50);
+    text("練習試行です。", 100, 50);
     let elapsedTime = millis() - baseTime;
     if (elapsedTime > adjustingDuration) {
         transitState();
@@ -125,7 +126,7 @@ function fixationPhase() {
 function responsePhase() {
     // draw message
     fill(textColor);
-    text("この円は好きですか?", 200, 100); // draw stimuli
+    text("この円の動きをどう思いますか?", 200, 100); // draw stimuli
     if (s == 1) {
         proba = int(random(21));
         if (proba < 3) {
@@ -222,35 +223,35 @@ function keyPressed() {
             baseTime = millis();
         }
     } else if (key == "1") {
-        if (currentState == 4) {
+        if (currentState == 5) {
             // record performance
             response[currentTrial] = 1;
             RT[currentTrial] = millis() - baseTime;
             transitState();
         }
     } else if (key == "2") {
-        if (currentState == 4) {
+        if (currentState == 5) {
             // record performance
             response[currentTrial] = 2;
             RT[currentTrial] = millis() - baseTime;
             transitState();
         }
     } else if (key == "3") {
-        if (currentState == 4) {
+        if (currentState == 5) {
             // record performance
             response[currentTrial] = 3;
             RT[currentTrial] = millis() - baseTime; // transit state
             transitState();
         }
     } else if (key == "4") {
-        if (currentState == 4) {
+        if (currentState == 5) {
             // record performance
             response[currentTrial] = 4;
             RT[currentTrial] = millis() - baseTime;
             transitState();
         }
     } else if (key == "5") {
-        if (currentState == 4) {
+        if (currentState == 5) {
             // record performance
             response[currentTrial] = 5;
             RT[currentTrial] = millis() - baseTime;
