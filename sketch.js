@@ -1,12 +1,10 @@
 //同志社大学心理学部　津田裕之先生のコードを一部改変して用いました。
-
 let isDebug;
 let numTrial;
 let fixationDuration;
 let judgementDuration;
 let explanationDuration;
 let adjustingDuration;
-let noticeDuration;
 let backgroundColor;
 let textColor;
 let proba; // Variables
@@ -26,12 +24,10 @@ let s = 1;
 function setup() {
     createCanvas(800, 600);
     frameRate(30); // Define experimental settings
-    isDebug = true;
-    numTrial = 5;
-    m = 30
-    noticeDuration = 6000;
+    isDebug = false;
+    numTrial = 33;
     explanationDuration = 5000;
-    adjustingDuration = 10000;
+    adjustingDuration = 12000;
     fixationDuration = 1000; // [milliseconds]
     judgementDuration = 9000; // [milliseconds]
     backgroundColor = 255; // gray-scale value from 0 (black) to 255 (white)
@@ -58,13 +54,11 @@ function draw() {
     } else if (currentState == 2) {
         adjustingPhase();
     } else if (currentState == 3) {
-        fixationPhase();
+         fixationPhase();
     } else if (currentState == 4) {
         responsePhase();
     } else if (currentState == 5) {
         evaluatePhase();
-    } else if (currentState == 10) {
-        noticePhase();
     } else if (currentState == 6) {
         endPhase();
     }
@@ -79,8 +73,7 @@ function titlePhase() {
 }
 function explanationPhase() {
     fill(textColor);
-    text("気持ち悪くなったら、直ちにブラウザを閉じてください", 100, 300);
-    text("この実験は図形の動きに関する実験です", 100, 250);
+    text("気持ち悪くなったら、直ちにブラウザを閉じてください", 200, 300);
     let elapsedTime = millis() - baseTime;
     if (elapsedTime > explanationDuration) {
         transitState();
@@ -108,25 +101,13 @@ function  adjustingPhase() {
     ellipse(400, 300, csize, csize);
     csize = csize + grow;
     
-    text("音量と見え方を調整してください", 100, 50);
-    text("この後三回練習試行に移ります", 100, 100);
+    text("音量と画面の明るさを調整してください", 50, 50);
+    text("12秒経過後実験試行を開始します", 50, 75);
     let elapsedTime = millis() - baseTime;
     if (elapsedTime > adjustingDuration) {
         transitState();
     }
 }
-
-function noticePhase() {
-    fill(textColor);
-    text("練習試行は終了です", 100, 300);
-    text("これから本番試行に入ります", 100, 250);
-    let elapsedTime = millis() - baseTime;
-    if (elapsedTime > noticeDuration) {
-        transitState();
-    }
-}
-
-
 
 function fixationPhase() {
     // draw fixation cross
@@ -143,31 +124,19 @@ function fixationPhase() {
 function responsePhase() {
     // draw message
     fill(textColor);
-    text("この円の動きをどう思いますか?", 200, 100); // draw stimuli
+    text("この円は好きですか?", 200, 100); // draw stimuli
     if (s == 1) {
-        proba = int(random(21));
+        proba = int(random(12));
         if (proba < 3) {
-            Tempo[currentTrial] = 1;
+            Tempo[currentTrial] = 10;
             m = 10;
         } else if (proba < 6){
-            Tempo[currentTrial] = 2;
-            m = 12;
-        } else if (proba < 9){
-            Tempo[currentTrial] = 3;
-            m = 15;
-        } else if (proba <12){
-            Tempo[currentTrial] = 4;
-            m =  18;
-        } else if (proba <15){
-            Tempo[currentTrial] = 5;
-            m = 20;
-        } else if (proba <18){
-            Tempo[currentTrial] = 6;
-            m = 30;
-        } else if (proba <21){
-            Tempo[currentTrial] = 7;
+            m = int(random(11,30));
+            Tempo[currentTrial] = m;
+        } else if (proba < 12){
+            Tempo[currentTrial] =  0;
             kick.setVolume(0);
-            m= 10;
+            m = 10;
         }
     }
     fill(0, 0, 0);
@@ -194,12 +163,14 @@ function responsePhase() {
     let elapsedTime = millis() - baseTime;
     if (elapsedTime > judgementDuration) {
         s = 1;
+        kick.setVolume(1);
         transitState();
     }
 }
 function evaluatePhase() {
     fill(textColor);
-    text("5段階で先ほどの円を評価してください", 50, 300);
+    text("1から5の数字キーを押して5段階で先ほどの円を評価してください", 50, 300);
+    text("5が最高評価です", 50, 350);
     let elapsedTime = millis() - baseTime;
 }
 function endPhase() {
@@ -219,16 +190,6 @@ function transitState() {
         baseTime = millis();
     } else if (currentState == 4) {
         currentState = 5;
-        baseTime = millis();
-    } else if (currentTrial == 2) {
-        currentState = 10;
-        baseTime = millis();
-    } else if (currentState == 5) {
-        currentTrial++;
-        currentState = 3;
-        baseTime = millis();
-    } else if (currentState == 10) {
-        currentState = 3;
         baseTime = millis();
     }else {
         if (currentTrial == numTrial - 1) {
