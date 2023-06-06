@@ -226,6 +226,7 @@ function transitState() {
     } else if (currentState == 5) {
         currentState = 3;
         baseTime = millis();
+        currentTrial++;
     } else if (currentState == 10) {
         currentState = 3;
         baseTime = millis();
