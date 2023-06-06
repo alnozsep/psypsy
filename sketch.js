@@ -220,10 +220,10 @@ function transitState() {
     } else if (currentState == 4) {
         currentState = 5;
         baseTime = millis();
-    } else if (currentTrial== 3) {
+    } else if (currentTrial == 3) {
         currentState = 10;
         baseTime = millis();
-    }else if (currentTrial== 10) {
+    }else if (currentState == 10) {
         currentState = 3;
         baseTime = millis();
     }else {
