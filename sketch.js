@@ -58,12 +58,12 @@ function draw() {
     } else if (currentState == 2) {
         adjustingPhase();
     } else if (currentState == 3) {
-         fixationPhase();
+        fixationPhase();
     } else if (currentState == 4) {
         responsePhase();
     } else if (currentState == 5) {
         evaluatePhase();
-    }else if (currentState == 10) {
+    } else if (currentState == 10) {
         noticePhase();
     } else if (currentState == 6) {
         endPhase();
@@ -223,14 +223,17 @@ function transitState() {
     } else if (currentTrial == 3) {
         currentState = 10;
         baseTime = millis();
-    }else if (currentState == 10) {
+    } else if (currentState == 5) {
+        currentState = 3;
+        baseTime = millis();
+    } else if (currentState == 10) {
         currentState = 3;
         baseTime = millis();
     }else {
         if (currentTrial == numTrial - 1) {
             // if all the trials have done, save data and transit to state 3.
             saveData();
-            currentState = 7;
+            currentState = 6;
         } else {
             // move on to next trial
             currentTrial++;
