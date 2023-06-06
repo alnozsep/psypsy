@@ -6,6 +6,7 @@ let fixationDuration;
 let judgementDuration;
 let explanationDuration;
 let adjustingDuration;
+let noticeDuration;
 let backgroundColor;
 let textColor;
 let proba; // Variables
@@ -28,6 +29,7 @@ function setup() {
     isDebug = true;
     numTrial = 5;
     m = 30
+    noticeDuration = 6000;
     explanationDuration = 5000;
     adjustingDuration = 10000;
     fixationDuration = 1000; // [milliseconds]
@@ -61,6 +63,8 @@ function draw() {
         responsePhase();
     } else if (currentState == 5) {
         evaluatePhase();
+    }else if (currentState == 10) {
+        noticePhase();
     } else if (currentState == 6) {
         endPhase();
     }
@@ -104,12 +108,25 @@ function  adjustingPhase() {
     ellipse(400, 300, csize, csize);
     csize = csize + grow;
     
-    text("練習試行です。", 100, 50);
+    text("音量と見え方を調整してください", 100, 50);
+    text("この後三回練習試行に移ります", 100, 100);
     let elapsedTime = millis() - baseTime;
     if (elapsedTime > adjustingDuration) {
         transitState();
     }
 }
+
+function noticePhase() {
+    fill(textColor);
+    text("練習試行は終了です", 100, 300);
+    text("これから本番試行に入ります", 100, 250);
+    let elapsedTime = millis() - baseTime;
+    if (elapsedTime > noticeDuration) {
+        transitState();
+    }
+}
+
+
 
 function fixationPhase() {
     // draw fixation cross
@@ -203,15 +220,21 @@ function transitState() {
     } else if (currentState == 4) {
         currentState = 5;
         baseTime = millis();
+    } else if (currentTrial== 3) {
+        currentState = 10;
+        baseTime = millis();
+    }else if (currentTrial== 10) {
+        currentState = 3;
+        baseTime = millis();
     }else {
         if (currentTrial == numTrial - 1) {
             // if all the trials have done, save data and transit to state 3.
             saveData();
-            currentState = 5;
+            currentState = 7;
         } else {
             // move on to next trial
             currentTrial++;
-            currentState = 2;
+            currentState = 3;
             baseTime = millis();
         }
     }
