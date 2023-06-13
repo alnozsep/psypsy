@@ -131,7 +131,7 @@ function responsePhase() {
             Tempo[currentTrial] = 10;
             m = 10;
         } else if (proba < 11){
-            m = int(random(11,30));
+            m = int(random(11,31));
             Tempo[currentTrial] = m;
         } else if (proba < 12){
             Tempo[currentTrial] =  0;
