@@ -127,10 +127,10 @@ function responsePhase() {
     text("この円は好きですか?", 200, 100); // draw stimuli
     if (s == 1) {
         proba = int(random(12));
-        if (proba < 3) {
+        if (proba < 1) {
             Tempo[currentTrial] = 10;
             m = 10;
-        } else if (proba < 6){
+        } else if (proba < 11){
             m = int(random(11,30));
             Tempo[currentTrial] = m;
         } else if (proba < 12){
