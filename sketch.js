@@ -136,7 +136,7 @@ function responsePhase() {
         } else if (proba < 12){
             Tempo[currentTrial] =  0;
             kick.setVolume(0);
-            m = 10;
+            m = 3000000000;
         }
     }
     fill(0, 0, 0);
